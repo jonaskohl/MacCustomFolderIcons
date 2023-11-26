@@ -1,5 +1,27 @@
 #!/opt/local/bin/bash
 
+if [[ $(uname -s) != "Darwin" ]]; then
+	echo -e "\e[0;91mError: This script only supports Darwin\e[0m" 1>&2
+	exit 1
+fi
+
+# Silence pushd and popd
+pushd () {
+	command pushd "$@" > /dev/null
+}
+
+popd () {
+	command popd "$@" > /dev/null
+}
+
+# Check if `convert` command is available
+if ! which convert >/dev/null; then
+	echo -e "\e[0;91mError: Missing dependency \e[1;91mImageMagick\e[0;91m!\e[0m" 1>&2
+	exit 2
+fi
+
+pushd $(dirname "$0") # Ensure we are in the repo root directory
+
 echo "Cleaning..."
 rm -rf build/
 rm -rf dist/
@@ -33,16 +55,16 @@ for dir in */; do
 	# Now in /build/png/
 
 	echo "Copying sizes for $d..."
-	cp "./$d/16.png" "../iconset/$d.iconset/icon_16x16.png"
-	cp "./$d/32.png" "../iconset/$d.iconset/icon_16x16@2x.png"
-	cp "./$d/32.png" "../iconset/$d.iconset/icon_32x32.png"
-	cp "./$d/64.png" "../iconset/$d.iconset/icon_32x32@2x.png"
-	cp "./$d/128.png" "../iconset/$d.iconset/icon_128x128.png"
-	cp "./$d/256.png" "../iconset/$d.iconset/icon_128x128@2x.png"
-	cp "./$d/256.png" "../iconset/$d.iconset/icon_256x256.png"
-	cp "./$d/512.png" "../iconset/$d.iconset/icon_256x256@2x.png"
-	cp "./$d/512.png" "../iconset/$d.iconset/icon_512x512.png"
-	cp "./$d/1024.png" "../iconset/$d.iconset/icon_512x512@2x.png"
+	[[ -e "./$d/16.png" ]] && cp "./$d/16.png" "../iconset/$d.iconset/icon_16x16.png"
+	[[ -e "./$d/32.png" ]] && cp "./$d/32.png" "../iconset/$d.iconset/icon_16x16@2x.png"
+	[[ -e "./$d/32.png" ]] && cp "./$d/32.png" "../iconset/$d.iconset/icon_32x32.png"
+	[[ -e "./$d/64.png" ]] && cp "./$d/64.png" "../iconset/$d.iconset/icon_32x32@2x.png"
+	[[ -e "./$d/128.png" ]] && cp "./$d/128.png" "../iconset/$d.iconset/icon_128x128.png"
+	[[ -e "./$d/256.png" ]] && cp "./$d/256.png" "../iconset/$d.iconset/icon_128x128@2x.png"
+	[[ -e "./$d/256.png" ]] && cp "./$d/256.png" "../iconset/$d.iconset/icon_256x256.png"
+	[[ -e "./$d/512.png" ]] && cp "./$d/512.png" "../iconset/$d.iconset/icon_256x256@2x.png"
+	[[ -e "./$d/512.png" ]] && cp "./$d/512.png" "../iconset/$d.iconset/icon_512x512.png"
+	[[ -e "./$d/1024.png" ]] && cp "./$d/1024.png" "../iconset/$d.iconset/icon_512x512@2x.png"
 
 	echo "Packing $d..."
 	iconutil -c icns --output "../../dist/$d.icns" "../iconset/$d.iconset/"
@@ -54,4 +76,6 @@ done
 popd # src/
 # Now in /
 
-echo "Done!"
+echo -e "\e[0;92mDone!\e[0m"
+
+popd # Jump to whereever we were before the script
