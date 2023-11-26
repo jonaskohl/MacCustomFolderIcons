@@ -82,6 +82,15 @@ done
 popd # src/
 # Now in /
 
+pushd "dist/"
+# Now in dist
+
+echo "Compressing..."
+zip all.zip *.icns
+
+popd
+# Now in /
+
 echo -e "\e[0;92mDone!\e[0m"
 
 popd # Jump to whereever we were before the script
