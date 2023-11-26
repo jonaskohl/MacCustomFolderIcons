@@ -20,6 +20,12 @@ if ! which convert >/dev/null; then
 	exit 2
 fi
 
+# Check if `iconutil` command is available
+if ! which iconutil >/dev/null; then
+	echo -e "\e[0;91mError: Missing dependency \e[1;91miconutil\e[0;91m!\e[0m" 1>&2
+	exit 2
+fi
+
 pushd $(dirname "$0") # Ensure we are in the repo root directory
 
 echo "Cleaning..."
