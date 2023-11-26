@@ -1,0 +1,57 @@
+#!/opt/local/bin/bash
+
+echo "Cleaning..."
+rm -rf build/
+rm -rf dist/
+
+mkdir build/
+mkdir build/png/
+mkdir build/iconset/
+mkdir dist/
+
+pushd src/
+# Now in /src/
+
+echo "Rendering PSDs..."
+for dir in */; do
+	d=$(basename "$dir")
+	echo "Processing $d..."
+	pushd $d
+	# Now in /src/$d/
+	mkdir "../../build/png/$d/"
+	mkdir "../../build/iconset/$d.iconset/"
+	echo "Rendering $d..."
+	for f in *.psd; do
+		fb=$(basename "$f" .psd)
+		echo "Rendering $f to $fb..."
+		convert "$f[0]" "../../build/png/$d/$fb.png"
+	done
+	popd # $d
+	# Now in /src/
+	
+	pushd "../build/png/"
+	# Now in /build/png/
+
+	echo "Copying sizes for $d..."
+	cp "./$d/16.png" "../iconset/$d.iconset/icon_16x16.png"
+	cp "./$d/32.png" "../iconset/$d.iconset/icon_16x16@2x.png"
+	cp "./$d/32.png" "../iconset/$d.iconset/icon_32x32.png"
+	cp "./$d/64.png" "../iconset/$d.iconset/icon_32x32@2x.png"
+	cp "./$d/128.png" "../iconset/$d.iconset/icon_128x128.png"
+	cp "./$d/256.png" "../iconset/$d.iconset/icon_128x128@2x.png"
+	cp "./$d/256.png" "../iconset/$d.iconset/icon_256x256.png"
+	cp "./$d/512.png" "../iconset/$d.iconset/icon_256x256@2x.png"
+	cp "./$d/512.png" "../iconset/$d.iconset/icon_512x512.png"
+	cp "./$d/1024.png" "../iconset/$d.iconset/icon_512x512@2x.png"
+
+	echo "Packing $d..."
+	iconutil -c icns --output "../../dist/$d.icns" "../iconset/$d.iconset/"
+
+	popd
+	# Now in /src/
+done
+
+popd # src/
+# Now in /
+
+echo "Done!"
