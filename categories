@@ -1,0 +1,35 @@
+InternalDisk:
+    DiskBlack
+    DiskBlue
+    DiskCobalt
+    DiskCopper
+    DiskGolden
+    DiskGray
+    DiskGreen
+    DiskOrange
+    DiskPurple
+    DiskRed
+    DiskWhite
+    DiskYellow
+
+ExternalDisk:
+    ExternalBlack
+    ExternalBlue
+    ExternalGray
+    ExternalGreen
+    ExternalMedia
+    ExternalNoLabel
+    ExternalPurple
+    ExternalRed
+    ExternalWD
+    ExternalWhite
+    ExternalYellow
+
+Folder:
+    MacPortsFolder
+    XAMPPFolder
+
+OSDisk:
+    DiskHighSierra
+    DiskMavericks
+    DiskMountainLion
